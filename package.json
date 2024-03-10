@@ -20,8 +20,6 @@
         "bing-scraper": "^1.4.11",
         "caliph-api": "^1.0.0",
         "canvacord": "^5.4.9",
-        "canvas": "^2.10.2",
-        "canvas-gif": "^1.0.3",
         "chalk": "^4.1.2",
         "convert-string-to-number": "^1.0.3",
         "dhn-api": "^1.1.3",
