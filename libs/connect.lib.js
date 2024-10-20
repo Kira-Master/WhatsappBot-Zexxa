@@ -16,7 +16,7 @@ setInterval(() => {
 const utility = new Utility()
 
 const connect = async () => {
-    const { state, saveCreds } = await useMultiFileAuthState(`./session/${sessionName}-session`)
+    const { state, saveCreds } = await useMultiFileAuthState(`./auth_info`)
     const { version, isLatest } = await fetchLatestBaileysVersion()
 
     const client = WASocket({
