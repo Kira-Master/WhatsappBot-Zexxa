@@ -34,6 +34,7 @@ const phoneNumber = await question('Enter your phone number with country code wi
 let code = await client.requestPairingCode(phoneNumber);
 code = code?.match(/.{1,4}/g)?.join("-") || code;
 console.log(`Code :`, code);
+    }
 
     store.bind(client.ev)
 
