@@ -19,13 +19,13 @@ try {
     });
     
     let [m1, m2] = fullArgs.split('|');
-    m2 = Number(m2)
+    let priceA = Number(m2)
     // Cek apakah res.data.data adalah array
     if (Array.isArray(res.data.data)) {
     
         // Cari service dengan nama yang spesifik dan harga di bawah m2
         let specificServices = res.data.data.filter(service => {
-            return service.name.toLowerCase().includes(m1.toLowerCase()) && service.price < m2;
+            return service.name.toLowerCase().includes(m1.toLowerCase()) && service.price < priceA;
         });
 
         if (specificServices.length === 0) {
