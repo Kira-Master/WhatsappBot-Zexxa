@@ -1,6 +1,6 @@
 const { ICommand } = require ('@libs/builders/command')
 const axios = require ('axios').default
-const { writeExif } = require('@libs/converter/exif')
+const { writeExif, writeExifImg } = require('@libs/converter/exif')
 const sharp = require('sharp')
 const cheerio = require('cheerio')
 const fs = require('fs')
@@ -26,10 +26,7 @@ module.exports = {
     console.log(gets.headers['content-type'])
     
     let typeImage = gets.headers['content-type']
-    let buffer = await writeExif(
-        { data: gets.data, headers: { 'content-type': typeImage } }, 
-        { packname: 'ZEXXA', author: 'DEV' }
-    );
+    let buffer = await writeExifImg(gets.data, { packname: 'ZEXXA', author: 'DEV' })
 
     if (!buffer) {
         console.log('Gagal mengkonversi gambar atau menambahkan metadata');
@@ -39,11 +36,6 @@ module.exports = {
         // Lanjutkan proses pengiriman atau pemrosesan buffer stiker
         await msg.replySticker({ url: buffer });
     }
-
-    // Hapus file sementara
-    fs.unlinkSync(tempJpegPath);
-    fs.unlinkSync('temp_image.webp'); // Hapus jika diperlukan
-
 	}
 }
 
