@@ -15,7 +15,8 @@ module.exports = {
     minArgs: 1,
     expectedArgs: 'gojosatoru, among, anime, animegif, bucin, rabbit, manusialidi, dinokuning, pentol, doge, gura, mukalu, spongebob, kawanspongebob, patrick, patrickgif, random, paimon, chat',
     example: '{prefix}{command} dinokuning',
-    callback: async({ msg, fullArgs, client }) => {
+    callback: async({ m, msg, fullArgs, client }) => {
+    await reaction(m.chat, '🗿')
     let text = fullArgs
     let res = await getSticker(text);
     let rand = res[Math.floor(Math.random() * res.length)]; // Pilih link stiker acak
@@ -37,7 +38,7 @@ module.exports = {
     // Gunakan gambar WebP yang disimpan untuk penambahan metadata
     let buffer = await writeExif(
         { data: webpBuffer, headers: { 'content-type': 'image/webp' } }, 
-        { packname: '', author: '' }
+        { packname: 'ZEXXA', author: 'DEV' }
     );
 
     if (!buffer) {
