@@ -12,13 +12,23 @@ module.exports = {
     expectedArgs: 'gojosatoru, among, anime, animegif, bucin, rabbit, manusialidi, dinokuning, pentol, doge, gura, mukalu, spongebob, kawanspongebob, patrick, patrickgif, random, paimon, chat',
     example: '{prefix}{command} dinokuning',
     callback: async({ msg, fullArgs, client }) => {
-        let text = fullArgs
-		let res = await getSticker(text)
-		let rand = res[Math.floor(Math.random() * res.length)]
-        let buffer = await writeExif({ data: rand, mimetype: headers['content-type'] }, { packname: 'Zexxa', author: 'Bot' })
-        if (!buffer) return msg.reply('Gagal mengkonversi gambar')
+let res = await getSticker(text);
+let rand = res[Math.floor(Math.random() * res.length)];
+
+// Ambil data gambar dari link
+let gets = await axios.get(rand, { responseType: 'arraybuffer' });
+
+// Tambahkan metadata dengan writeExif
+let buffer = await writeExif({ data: gets.data, headers: { 'content-type': 'image/jpeg' } }, { packname: 'Zexxa', author: 'Bot' });
+
+// Cek apakah buffer berhasil dibuat
+if (!buffer) {
+  return msg.reply('Gagal mengkonversi gambar');
+}
+
+// Lanjutkan proses pengiriman atau pemrosesan buffer stiker
         
-        msg.replySticker({ url: buffer })
+        msg.replySticker({ url: rand })
 	}
 }
 
