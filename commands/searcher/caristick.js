@@ -37,7 +37,7 @@ module.exports = {
     // Gunakan gambar WebP yang disimpan untuk penambahan metadata
     let buffer = await writeExif(
         { data: webpBuffer, headers: { 'content-type': 'image/webp' } }, 
-        { packname: 'Zexxa', author: 'Bot' }
+        { packname: '', author: '' }
     );
 
     if (!buffer) {
