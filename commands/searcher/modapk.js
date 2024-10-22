@@ -19,7 +19,7 @@ module.exports = {
     
     for ( let i of xxx.result ) {
     zexxaMsg += `*Title: ${i.title}*\n`
-    zexxaMsg += `*Link: ${i.link}*\n`
+    zexxaMsg += `*Link: ${i.link}*\n\n`
     }
     await msg.replyImage({ url: xxx.result[0].thumb }, zexxaMsg).catch(() => 
     { return msg.reply('error saat mengirim data')

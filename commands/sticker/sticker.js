@@ -1,57 +1,34 @@
-const config = require('@config')
+const axios = require('axios')
+const { writeExif } = require('@libs/converter/exif')
 
-const axios = require('axios').default
-const i18n = require('i18n')
-
-const sticker = axios.create({
-    baseURL: 'https://sticker-api-tpe3wet7da-uc.a.run.app',
-})
-
-/**
- * @type { import('@libs/builders/command').ICommand }
- */
 module.exports = {
-    aliases: ['s', 'stiker'],
+    wait: true,
+    aliases: ['stiker', 's'],
     category: 'Sticker',
-    description: 'Sticker Maker',
-    waitMessage: 'Please wait, making sticker...',
-    callback: async ({ msg, client, message }) => {
-        const file = (await msg.download('buffer')) || (msg.quoted && (await msg.quoted.download('buffer')))
+    callback: async ({ msg, fullArgs, command, prefix }) => {
         if (msg.typeCheck.isImage || msg.typeCheck.isQuotedImage) {
-            const data = {
-                image: `data:image/jpeg;base64,${file.toString('base64')}`,
-                stickerMetadata: {
-                    pack: config.botName,
-                    author: 'Bot',
-                    keepScale: true,
-                    circle: false,
-                    removebg: false,
-                },
-            }
-            sticker.post('/prepareWebp', data).then((res) => {
-                client.sendMessage(msg.from, { sticker: Buffer.from(res.data.webpBase64, 'base64') }, { quoted: message })
-            })
+            let [packname, author] = fullArgs ? fullArgs.split('|') : 'Bot|Whatsapp'.split('|')
+            let file = (await msg.download('buffer') || (msg.quoted && (await msg.quoted.download('buffer'))))
+            let fileurl = await writeExif({ mimetype: 'image', data: file }, { packname, author })
+
+            await msg.replySticker({ url: fileurl })
         } else if (msg.typeCheck.isVideo || msg.typeCheck.isQuotedVideo) {
-            const data = {
-                file: `data:video/mp4;base64,${file.toString('base64')}`,
-                stickerMetadata: {
-                    pack: config.botName,
-                    author: 'Bot',
-                    keepScale: true,
-                },
-                processOptions: {
-                    crop: false,
-                    fps: 10,
-                    startTime: '00:00:00.0',
-                    endTime: '00:00:7.0',
-                    loop: 0,
-                },
-            }
-            sticker.post('/convertMp4BufferToWebpDataUrl', data).then((data) => {
-                client.sendMessage(msg.from, { sticker: Buffer.from(data.data.split(';base64,')[1], 'base64') }, { quoted: message })
-            })
+            let [packname, author] = fullArgs ? fullArgs.split('|') : 'Bot|Whatsapp'.split('|')
+            let file = (await msg.download('buffer') || (msg.quoted && (await msg.quoted.download('buffer'))))
+            let fileurl = await writeExif({ mimetype: 'video', data: file }, { packname, author })
+
+            await msg.replySticker({ url: fileurl })
         } else {
-            msg.reply(i18n.__('sticker.no_media'))
+            if (/http:|https:/.test(fullArgs)) {
+                await axios.get(fullArgs, { responseType: 'arraybuffer' })
+                    .then(async ({ headers, data }) => {
+                        if (!headers || !data || !/image/.test(headers['content-type'])) return msg.reply('Kirim gambar/video dengan caption ' + prefix + command + ' atau url gambar')
+                        let fileurl = await writeExif({ data, mimetype: headers['content-type'] }, { packname: 'Bot', author: 'Whatsapp' })
+
+                        return msg.replySticker({ url: fileurl })
+                    })
+                    .catch(() => msg.reply('Kirim gambar/video dengan caption ' + prefix + command + ' atau url gambar'))
+            } else return msg.reply('Kirim gambar/video dengan caption ' + prefix + command + ' atau url gambar')
         }
-    },
+    }
 }
