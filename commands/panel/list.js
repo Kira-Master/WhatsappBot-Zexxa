@@ -17,18 +17,20 @@ try {
             'Content-Type': 'application/json' 
         } 
     });
+    
+    let [m1, m2] = fullArgs.split('_')
 
     // Cek apakah res.data.data adalah array
     if (Array.isArray(res.data.data)) {
-        // Cari service dengan nama yang mengandung "Tiktok Followers"
-        let specificServices = res.data.data.filter(service => service.name.toLowerCase().includes(fullArgs.toLowerCase()));
+        // Cari service dengan nama yang spesifik
+        let specificServices = res.data.data.filter(service => service.name.toLowerCase().includes(m1.toLowerCase()) && service.price < m2);
 
         if (specificServices.length === 0) {
             console.log("Tidak ada layanan yang ditemukan dengan kata ", fullArgs);
         } else {
         let zxxa = ''
         for (let i of specificServices) {
-        zxxa += `ID: ${i.id}\nNama: ${i.name}\nHarga: ${i.price}\n\n`
+        zxxa += `ID: ${i.id}\nNama: ${i.name}\nHarga: Rp.${i.price}\n\n`
         }
         await msg.reply(zxxa)
         }
