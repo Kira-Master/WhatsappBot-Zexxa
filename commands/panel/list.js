@@ -17,25 +17,26 @@ try {
             'Content-Type': 'application/json' 
         } 
     });
-    console.log(res.data.data)
 
-    // Cek apakah res.data adalah array
+    console.log(res.data.data);
+
+    // Cek apakah res.data.data adalah array
     if (Array.isArray(res.data.data)) {
-        // Cari service dengan id 777
-        let specificService = res.data.data.find(service => service.id === fullArgs);
+        // Cari service dengan nama yang mengandung "Tiktok Followers"
+        let specificServices = res.data.data.filter(service => service.name.includes(fullArgs));
 
-        if (specificService) {
-            console.log(`Service dengan ID ${fullArgs} ditemukan:`);
-            console.log(specificService); // Menampilkan seluruh detail dari service dengan id 777
+        if (specificServices.length === 0) {
+            console.log("Tidak ada layanan yang ditemukan dengan kata ", fullArgs);
         } else {
-            console.log(`Service dengan ID ${fullArgs} tidak ditemukan.`);
+            console.log(specificServices); // Menampilkan layanan yang ditemukan
         }
     } else {
         console.log('Data yang diterima bukan array.');
     }
 
 } catch (error) {
-    console.error(error);
+    console.error('Terjadi kesalahan:', error.message || error);
 }
+
     }
 }
