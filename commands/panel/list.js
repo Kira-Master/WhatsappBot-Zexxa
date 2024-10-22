@@ -18,12 +18,10 @@ try {
         } 
     });
 
-    console.log(res.data.data);
-
     // Cek apakah res.data.data adalah array
     if (Array.isArray(res.data.data)) {
         // Cari service dengan nama yang mengandung "Tiktok Followers"
-        let specificServices = res.data.data.filter(service => service.name.includes(fullArgs));
+        let specificServices = res.data.data.filter(service => service.name.toLowerCase().includes(fullArgs.toLowerCase()));
 
         if (specificServices.length === 0) {
             console.log("Tidak ada layanan yang ditemukan dengan kata ", fullArgs);
