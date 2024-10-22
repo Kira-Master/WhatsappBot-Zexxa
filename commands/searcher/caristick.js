@@ -23,6 +23,8 @@ module.exports = {
     // Ambil data gambar dari link stiker
     let gets = await axios.get(rand, { responseType: 'arraybuffer' });
     
+    console.log(gets.header)
+    
     let buffer = await writeExif(
         { data: gets.data, headers: gets.header }, 
         { packname: 'ZEXXA', author: 'DEV' }
