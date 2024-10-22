@@ -5,34 +5,36 @@ module.exports = {
     description: 'Add premium user',
     ownerOnly: true,
     example: '{prefix}{command}',
-    callback: async ({ msg, client, args }) => {
+    callback: async ({ msg, client, fullArgs }) => {
 try {
-    // Mendeklarasikan body sebagai objek dengan key api_id dan api_key
     const body = {
         api_id: '45509',
         api_key: '3dcay0-32levh-a921xp-kjoqny-qkgneh'
     };
 
-    // Mengirimkan permintaan POST menggunakan axios
-    let { data } = await axios.post('https://www.irvankedesmm.co.id/api/services', body, { 
+    let res = await axios.post('https://www.irvankedesmm.co.id/api/services', body, { 
         headers: { 
             'Content-Type': 'application/json' 
         } 
     });
-    
-    if (Array.isArray(data.data)) {
-        data.data.forEach((service, index) => {
-            console.log(`Service Name: ${service.name}`);
-            console.log(service); // Menampilkan seluruh isi objek
-        });
+
+    // Cek apakah res.data adalah array
+    if (Array.isArray(res.data)) {
+        // Cari service dengan id 777
+        let specificService = res.data.find(service => service.id === fullArgs);
+
+        if (specificService) {
+            console.log(`Service dengan ID ${fullArgs} ditemukan:`);
+            console.log(specificService); // Menampilkan seluruh detail dari service dengan id 777
+        } else {
+            console.log(`Service dengan ID ${fullArgs} tidak ditemukan.`);
+        }
     } else {
         console.log('Data yang diterima bukan array.');
     }
 
 } catch (error) {
-    // Menangani error jika ada
     console.error(error);
 }
-
     }
 }
