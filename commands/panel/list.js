@@ -14,14 +14,20 @@ try {
     };
 
     // Mengirimkan permintaan POST menggunakan axios
-    let res = await axios.post('https://www.irvankedesmm.co.id/api/services', body, { 
+    let { data } = await axios.post('https://www.irvankedesmm.co.id/api/services', body, { 
         headers: { 
             'Content-Type': 'application/json' 
         } 
     });
-
-    // Menampilkan data respons dari server
-    console.log(res.data);
+    
+    if (Array.isArray(res.data)) {
+        res.data.forEach((service, index) => {
+            console.log(`Service ${index + 1}:`);
+            console.log(service); // Menampilkan seluruh isi objek
+        });
+    } else {
+        console.log('Data yang diterima bukan array.');
+    }
 
 } catch (error) {
     // Menangani error jika ada
