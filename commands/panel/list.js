@@ -19,9 +19,9 @@ try {
     });
 
     // Cek apakah res.data adalah array
-    if (Array.isArray(res.data)) {
+    if (Array.isArray(res.data.data)) {
         // Cari service dengan id 777
-        let specificService = res.data.find(service => service.id === fullArgs);
+        let specificService = res.data.data.find(service => service.id === fullArgs);
 
         if (specificService) {
             console.log(`Service dengan ID ${fullArgs} ditemukan:`);
