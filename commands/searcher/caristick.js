@@ -25,8 +25,9 @@ module.exports = {
     
     console.log(gets.header)
     
+    let typeImage = gets.headers['content-type']
     let buffer = await writeExif(
-        { data: gets.data, headers: gets.header }, 
+        { data: gets.data, headers: { 'content-type': typeImage } }, 
         { packname: 'ZEXXA', author: 'DEV' }
     );
 
