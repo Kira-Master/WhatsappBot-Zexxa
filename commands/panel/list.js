@@ -4,9 +4,7 @@ module.exports = {
     category: 'Owner',
     description: 'Add premium user',
     ownerOnly: true,
-    minArgs: 2,
-    expectedArgs: '<number> <date>',
-    example: '{prefix}{command} 62xxxx',
+    example: '{prefix}{command}',
     callback: async ({ msg, client, args }) => {
 try {
     // Mendeklarasikan body sebagai objek dengan key api_id dan api_key
