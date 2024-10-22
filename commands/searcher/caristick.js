@@ -54,7 +54,8 @@ let res = await getSticker(text);
 // Lanjutkan proses pengiriman atau pemrosesan buffer stiker
         
         await msg.replySticker({ url: buffer })
-        fs.unlinkSync('temp_image.webp')
+        await fs.unlinkSync('temp_image.webp')
+        fs.unlinkSync('temp_image.jpg')
 	}
 }
 
