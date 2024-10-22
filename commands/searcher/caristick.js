@@ -13,41 +13,65 @@ module.exports = {
     example: '{prefix}{command} dinokuning',
     callback: async({ msg, fullArgs, client }) => {
         let text = fullArgs
-		let res = await stickersearch(text)
-        console.log(res)
-        /*let buffer = await writeExif({ data: data, mimetype: headers['content-type'] }, { packname: 'Zexxa', author: 'Bot' })
+		let res = await getSticker(text)
+		let rand = res[Math.floor(Math.random() * res.length)]
+        let buffer = await writeExif({ data: rand, mimetype: headers['content-type'] }, { packname: 'Zexxa', author: 'Bot' })
         if (!buffer) return msg.reply('Gagal mengkonversi gambar')
         
-        msg.replySticker({ url: buffer })*/
+        msg.replySticker({ url: buffer })
 	}
 }
 
-function stickersearch(text) {
-		return new Promise((resolve, reject) => {
-			axios.get(`https://getstickerpack.com/stickers?query=${text}`)
-				.then(({data}) => {
-					const $ = cheerio.load(data)
-					const source = []
-					const link = [];
-					var	ya = $('#stickerPacks > div > div:nth-child(3) > div > a').text()
-		if (!ya ) return resolve()
-					$('#stickerPacks > div > div:nth-child(3) > div > a').each(function(a, b) {
-						source.push($(b).attr('href'))
-					})
-					axios.get(source[Math.floor(Math.random() * source.length)])
-						.then(({
-							data
-						}) => {
-							const $$ = cheerio.load(data)
-							$$('#stickerPack > div > div.row > div > img').each(function(c, d) {
-								link.push($$(d).attr('src').replace(/&d=200x200/g,''))
-							})
-							result = {
-								title: $$('#intro > div > div > h1').text(),
-								sticker_url: link
-							}
-							resolve(result)
-						})
-				}).catch(reject)
-		})
-	}
+const sticker = async (text) => {
+  try {
+    const res = await axios.get(`https://getstickerpack.com/stickers?query=${text}`);
+    const $ = cheerio.load(res.data);
+    
+    const stickers = [];
+    $('#stickerPacks > .container > div.row > div.col-md-6').each((index, element) => {
+      const title = $(element).find('a').text();
+      const link = $(element).find('a').attr('href');
+      
+      stickers.push({
+        title: title.trim(),
+        link  // Pastikan link lengkap
+      });
+    });
+    
+    return stickers;
+    
+  } catch (error) {
+    console.error('Error:', error);
+    return [];
+  }
+}
+
+export const getSticker = async (text) => {
+  try {
+    const res = await sticker(text);
+    
+    if (res.length === 0) {
+      console.error('Tidak ada sticker yang ditemukan');
+      return;
+    }
+
+    // Memilih satu hasil secara acak
+    const randomSticker = res[Math.floor(Math.random() * res.length)];
+
+    console.log('Sticker acak terpilih:', randomSticker.link);
+    const take = await axios.get(randomSticker.link);
+    const $ = cheerio.load(take.data);
+    
+    const stickerImages = [];
+    $('#stickerPack > .container > .row > div.col-xl-3').each((index, element) => {
+      const imgSrc = $(element).find('img').attr('data-src-large');  // Ambil src dari tag img
+      stickerImages.push(imgSrc);
+    });
+
+    console.log('Gambar Sticker:', stickerImages);
+    return stickerImages;
+ 
+  } catch (error) {
+    console.error(error);
+  }
+}
