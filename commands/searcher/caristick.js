@@ -12,6 +12,7 @@ module.exports = {
     expectedArgs: 'gojosatoru, among, anime, animegif, bucin, rabbit, manusialidi, dinokuning, pentol, doge, gura, mukalu, spongebob, kawanspongebob, patrick, patrickgif, random, paimon, chat',
     example: '{prefix}{command} dinokuning',
     callback: async({ msg, fullArgs, client }) => {
+    let text = fullArgs
 let res = await getSticker(text);
 let rand = res[Math.floor(Math.random() * res.length)];
 
