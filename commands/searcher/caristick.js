@@ -22,21 +22,9 @@ module.exports = {
 
     // Ambil data gambar dari link stiker
     let gets = await axios.get(rand, { responseType: 'arraybuffer' });
-
-    // Konversi gambar ke JPEG menggunakan sharp
-    let jpegBuffer = await sharp(gets.data).jpeg().toBuffer();
-
-    // Simpan gambar sementara ke local storage untuk pengecekan manual
-    let tempJpegPath = 'temp_image.jpg';
-    fs.writeFileSync(tempJpegPath, jpegBuffer); // Simpan sebagai JPEG
-    console.log('Gambar disimpan ke local storage untuk pengecekan manual.');
-
-    // Konversi dari JPEG ke WebP untuk proses `writeExif`
-    let webpBuffer = await sharp(jpegBuffer).webp().toBuffer();
-
-    // Gunakan gambar WebP yang disimpan untuk penambahan metadata
+    
     let buffer = await writeExif(
-        { data: webpBuffer, headers: { 'content-type': 'image/webp' } }, 
+        { data: gets.data, headers: gets.header }, 
         { packname: 'ZEXXA', author: 'DEV' }
     );
 
