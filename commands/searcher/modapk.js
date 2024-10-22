@@ -21,7 +21,7 @@ module.exports = {
     zexxaMsg += `*Title: ${i.title}*\n`
     zexxaMsg += `*Link: ${i.link}*\n`
     }
-    await msg.replyImage({ url: xxx.result.thumb }, zexxaMsg).catch(() => 
+    await msg.replyImage({ url: xxx.result[0].thumb }, zexxaMsg).catch(() => 
     { return msg.reply('error saat mengirim data')
     })
     }
