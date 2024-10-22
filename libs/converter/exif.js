@@ -76,11 +76,9 @@ async function videoToWebp(media) {
 
 async function writeExif(media, metadata) {
     try {
-        // Log properti media untuk debug
         console.log('Media yang diterima:', media);
         console.log('Metadata yang diterima:', metadata);
         
-        // Cek apakah media memiliki properti mimetype
         if (!media.mimetype) {
             console.error('Tipe media tidak tersedia, pastikan objek media memiliki properti mimetype');
             return null;
@@ -88,13 +86,11 @@ async function writeExif(media, metadata) {
 
         console.log('Tipe media:', media.mimetype);
         
-        // Tentukan apakah media adalah WebP, image, atau video, lalu konversi jika perlu
         let wMedia = /webp/.test(media.mimetype) ? media.data 
             : /image/.test(media.mimetype) ? await imageToWebp(media.data) 
             : /video/.test(media.mimetype) ? await videoToWebp(media.data) 
             : null;
 
-        // Jika wMedia kosong, konversi gagal
         if (!wMedia) {
             console.error('Media tidak dikenali atau gagal dikonversi ke WebP');
             return null;
@@ -102,11 +98,9 @@ async function writeExif(media, metadata) {
 
         console.log('Media setelah konversi:', wMedia.length);
 
-        // Path file sementara untuk input dan output
         const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).toString('hex')}.webp`);
         const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).toString('hex')}.webp`);
 
-        // Tulis media yang sudah dikonversi ke file sementara
         fs.writeFileSync(tmpFileIn, wMedia);
         console.log('File sementara berhasil dibuat:', tmpFileIn);
 
@@ -122,7 +116,7 @@ async function writeExif(media, metadata) {
             const exifAttr = Buffer.from([0x49, 0x49, 0x2A, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x41, 0x57, 0x07, 0x00, 0x00, 0x00]);
             const jsonBuff = Buffer.from(JSON.stringify(json), "utf-8");
             const exif = Buffer.concat([exifAttr, jsonBuff]);
-            exif.writeUIntLE(jsonBuff.length, 14, 4); // Panjang JSON ditulis di offset ke 14
+            exif.writeUIntLE(jsonBuff.length, 14, 4);
 
             await img.load(tmpFileIn).catch(err => {
                 console.error('Error saat memuat WebP:', err);
@@ -142,7 +136,7 @@ async function writeExif(media, metadata) {
             });
 
             console.log('File WebP dengan exif berhasil disimpan:', tmpFileOut);
-            return tmpFileOut; // Kembalikan path ke file output
+            return tmpFileOut;
 
         } else {
             console.error('Metadata packname atau author tidak ada.');
