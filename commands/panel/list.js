@@ -17,6 +17,7 @@ try {
             'Content-Type': 'application/json' 
         } 
     });
+    console.log(res.data.data)
 
     // Cek apakah res.data adalah array
     if (Array.isArray(res.data.data)) {
