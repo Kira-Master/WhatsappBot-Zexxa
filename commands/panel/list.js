@@ -28,7 +28,11 @@ try {
         if (specificServices.length === 0) {
             console.log("Tidak ada layanan yang ditemukan dengan kata ", fullArgs);
         } else {
-            console.log(specificServices); // Menampilkan layanan yang ditemukan
+        let zxxa = ''
+        for (let i of specificServices) {
+        zxxa += `ID: ${i.id}\nNama: ${i.name}\nHarga: ${i.price}\n\n`
+        }
+        await msg.reply(zxxa)
         }
     } else {
         console.log('Data yang diterima bukan array.');
