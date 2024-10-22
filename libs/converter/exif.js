@@ -114,24 +114,83 @@ async function writeExifVid(media, metadata) {
 }
 
 async function writeExif(media, metadata) {
-    let wMedia = /webp/.test(media.mimetype) ? media.data : /image/.test(media.mimetype) ? await imageToWebp(media.data) : /video/.test(media.mimetype) ? await videoToWebp(media.data) : ""
-    const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    fs.writeFileSync(tmpFileIn, wMedia)
+    try {
+        // Tentukan apakah media adalah WebP, image, atau video, lalu konversi jika perlu
+        let wMedia = /webp/.test(media.mimetype) ? media.data 
+            : /image/.test(media.mimetype) ? await imageToWebp(media.data) 
+            : /video/.test(media.mimetype) ? await videoToWebp(media.data) 
+            : null;
 
-    if (metadata.packname || metadata.author) {
-        const img = new webp.Image()
-        const json = { "sticker-pack-id": `https://github.com/ikhsan77/SHANNBot-MD`, "sticker-pack-name": metadata.packname, "sticker-pack-publisher": metadata.author, "emojis": metadata.categories ? metadata.categories : [""] }
-        const exifAttr = Buffer.from([0x49, 0x49, 0x2A, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x41, 0x57, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00])
-        const jsonBuff = Buffer.from(JSON.stringify(json), "utf-8")
-        const exif = Buffer.concat([exifAttr, jsonBuff])
-        exif.writeUIntLE(jsonBuff.length, 14, 4)
-        await img.load(tmpFileIn)
-        fs.unlinkSync(tmpFileIn)
-        img.exif = exif
-        await img.save(tmpFileOut)
-        return tmpFileOut
+        // Jika wMedia kosong, konversi gagal
+        if (!wMedia) {
+            console.error('Media tidak dikenali atau gagal dikonversi ke WebP');
+            return null;
+        }
+
+        console.log('Media setelah konversi:', wMedia.length);
+
+        // Path file sementara untuk input dan output
+        const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).toString('hex')}.webp`);
+        const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).toString('hex')}.webp`);
+
+        // Tulis media yang sudah dikonversi ke file sementara
+        fs.writeFileSync(tmpFileIn, wMedia);
+        console.log('File sementara berhasil dibuat:', tmpFileIn);
+
+        if (metadata.packname || metadata.author) {
+            // Buat objek Image dari node-webpmux
+            const img = new webp.Image();
+            
+            // Buat JSON untuk metadata exif
+            const json = {
+                "sticker-pack-id": `https://github.com/ikhsan77/SHANNBot-MD`,
+                "sticker-pack-name": metadata.packname || "",
+                "sticker-pack-publisher": metadata.author || "",
+                "emojis": metadata.categories ? metadata.categories : [""]
+            };
+
+            const exifAttr = Buffer.from([0x49, 0x49, 0x2A, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x41, 0x57, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00]);
+            const jsonBuff = Buffer.from(JSON.stringify(json), "utf-8");
+            const exif = Buffer.concat([exifAttr, jsonBuff]);
+            exif.writeUIntLE(jsonBuff.length, 14, 4); // Panjang JSON ditulis di offset ke 14
+
+            // Debugging panjang JSON
+            console.log('Panjang JSON:', jsonBuff.length);
+            console.log('Exif buffer:', exif);
+
+            // Load file WebP menggunakan webp.Image()
+            await img.load(tmpFileIn).catch(err => {
+                console.error('Error saat memuat WebP:', err);
+                throw err;
+            });
+
+            // Hapus file sementara setelah dipakai
+            if (fs.existsSync(tmpFileIn)) {
+                fs.unlinkSync(tmpFileIn);
+            } else {
+                console.error('File sementara tidak ditemukan:', tmpFileIn);
+            }
+
+            // Tambahkan exif dan simpan ke file output
+            img.exif = exif;
+            await img.save(tmpFileOut).catch(err => {
+                console.error('Error saat menyimpan WebP dengan exif:', err);
+                throw err;
+            });
+
+            console.log('File WebP dengan exif berhasil disimpan:', tmpFileOut);
+            return tmpFileOut; // Kembalikan path ke file output
+
+        } else {
+            console.error('Metadata packname atau author tidak ada.');
+            return null;
+        }
+
+    } catch (error) {
+        console.error('Terjadi kesalahan di writeExif:', error);
+        return null;
     }
 }
+
 
 module.exports = { imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif }
