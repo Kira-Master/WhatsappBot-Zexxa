@@ -26,19 +26,27 @@ let res = await getSticker(text);
     // Konversi gambar ke JPEG menggunakan sharp
     let jpegBuffer = await sharp(gets.data).jpeg().toBuffer();
 
-    // Simpan gambar sementara ke local storage
-    let tempFilePath = 'temp_image.jpg';
-    fs.writeFileSync(tempFilePath, jpegBuffer); // Simpan sebagai JPEG
+    // Simpan gambar sementara ke local storage untuk pengecekan manual
+    let tempJpegPath = 'temp_image.jpg';
+    fs.writeFileSync(tempJpegPath, jpegBuffer); // Simpan sebagai JPEG
     console.log('Gambar disimpan ke local storage untuk pengecekan manual.');
 
-    // Gunakan gambar yang disimpan untuk penambahan metadata
+    // Konversi dari JPEG ke WebP untuk proses `writeExif`
+    let webpBuffer = await sharp(jpegBuffer).webp().toBuffer();
+
+    // Simpan hasil WebP sementara
+    let tempWebpPath = 'temp_image.webp';
+    fs.writeFileSync(tempWebpPath, webpBuffer);
+    console.log('Gambar WebP disimpan.');
+
+    // Gunakan gambar WebP yang disimpan untuk penambahan metadata
     let buffer = await writeExif(
-      { data: jpegBuffer, headers: { 'content-type': 'image/jpeg' } }, 
+      { data: webpBuffer, headers: { 'content-type': 'image/webp' } }, 
       { packname: 'Zexxa', author: 'Bot' }
     );
 
     if (!buffer) {
-      return console.log('Gagal mengkonversi gambar');
+      return console.log('Gagal mengkonversi gambar atau menambahkan metadata');
     } else {
       return console.log('Berhasil menambahkan metadata ke gambar.');
     }
