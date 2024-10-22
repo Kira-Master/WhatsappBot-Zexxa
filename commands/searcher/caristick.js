@@ -30,7 +30,7 @@ fs.writeFileSync('temp_image.webp', gets.data); // Simpan gambar WebP
 console.log('Gambar disimpan untuk pengecekan manual.');
 
 // Tambahkan metadata menggunakan writeExif
-let buffer = await writeExif({ data: gets.data, headers: { 'content-type': 'image/webp' } }, { packname: 'Zexxa', author: 'Bot' });
+let buffer = await writeExif({ data: rand, headers: { 'content-type': 'image/webp' } }, { packname: 'Zexxa', author: 'Bot' });
 
 if (!buffer) {
   return msg.reply('Gagal mengkonversi gambar');
