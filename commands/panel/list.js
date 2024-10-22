@@ -26,7 +26,7 @@ try {
     
         // Cari service dengan nama yang spesifik dan harga di bawah m2
         let specificServices = res.data.data.filter(service => {
-        console.log(typeof service.price)
+        console.log(typeof m2)
             return service.name.toLowerCase().includes(m1.toLowerCase()) && service.price < m2;
         });
 
