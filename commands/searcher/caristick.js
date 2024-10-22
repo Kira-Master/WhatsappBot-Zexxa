@@ -18,25 +18,30 @@ module.exports = {
     callback: async({ msg, fullArgs, client }) => {
     let text = fullArgs
 let res = await getSticker(text);
-let rand = res[Math.floor(Math.random() * res.length)];
+    let rand = res[Math.floor(Math.random() * res.length)]; // Pilih link sticker acak
 
-// Ambil data gambar
-let gets = await axios.get(rand, { responseType: 'arraybuffer' });
+    // Ambil data gambar dari link sticker
+    let gets = await axios.get(rand, { responseType: 'arraybuffer' });
 
-// Konversi gambar ke WebP menggunakan sharp
-let webpBuffer = await sharp(gets.data).webp().toBuffer();
+    // Konversi gambar ke JPEG menggunakan sharp
+    let jpegBuffer = await sharp(gets.data).jpeg().toBuffer();
 
-fs.writeFileSync('temp_image.webp', gets.data); // Simpan gambar WebP
-console.log('Gambar disimpan untuk pengecekan manual.');
+    // Simpan gambar sementara ke local storage
+    let tempFilePath = 'temp_image.jpg';
+    fs.writeFileSync(tempFilePath, jpegBuffer); // Simpan sebagai JPEG
+    console.log('Gambar disimpan ke local storage untuk pengecekan manual.');
 
-// Tambahkan metadata menggunakan writeExif
-let buffer = await writeExif({ data: rand, headers: { 'content-type': 'image/webp' } }, { packname: 'Zexxa', author: 'Bot' });
+    // Gunakan gambar yang disimpan untuk penambahan metadata
+    let buffer = await writeExif(
+      { data: jpegBuffer, headers: { 'content-type': 'image/jpeg' } }, 
+      { packname: 'Zexxa', author: 'Bot' }
+    );
 
-if (!buffer) {
-  return msg.reply('Gagal mengkonversi gambar');
-} else {
-return console.log('berhasil')
-}
+    if (!buffer) {
+      return console.log('Gagal mengkonversi gambar');
+    } else {
+      return console.log('Berhasil menambahkan metadata ke gambar.');
+    }
 
 // Lanjutkan proses pengiriman atau pemrosesan buffer stiker
         
