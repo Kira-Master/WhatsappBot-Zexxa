@@ -16,7 +16,6 @@ module.exports = {
     expectedArgs: 'gojosatoru, among, anime, animegif, bucin, rabbit, manusialidi, dinokuning, pentol, doge, gura, mukalu, spongebob, kawanspongebob, patrick, patrickgif, random, paimon, chat',
     example: '{prefix}{command} dinokuning',
     callback: async({ reaction, m, msg, fullArgs, client }) => {
-    await reaction(m.chat, '🗿')
     let text = fullArgs
     let res = await getSticker(text);
     let rand = res[Math.floor(Math.random() * res.length)]; // Pilih link stiker acak
