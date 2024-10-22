@@ -53,7 +53,7 @@ module.exports = {
                 let buff = await writeExifVid(buffer, { packname: 'Made by', author: 'ZexxaBeta' })
                 client.sendMessage(msg.from, { sticker: { url: buff }, packname: 'Sticker By', author: 'ZexxaBeta' }, { quoted: message })
             })
-            .catch((err) => { return msg.reply('terjadi kesalahan saat memuat media') 
+            .catch((err) => { return msg.reply('terjadi kesalahan saat memuat media', err) 
             console.error(err)
             })
         return console.log()
