@@ -23,6 +23,10 @@ try {
 
     // Cek apakah res.data.data adalah array
     if (Array.isArray(res.data.data)) {
+    
+    res.data.data.forEach(service => {
+            console.log(`Service: ${service.name}, Price: ${service.price}, Type of price: ${typeof service.price}`);
+        });
         // Cari service dengan nama yang spesifik
         let specificServices = res.data.data.filter(service => service.name.toLowerCase().includes(m1.toLowerCase()) && service.price < m2);
 
