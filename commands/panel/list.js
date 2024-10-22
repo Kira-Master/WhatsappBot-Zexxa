@@ -20,8 +20,8 @@ try {
         } 
     });
     
-    if (Array.isArray(data)) {
-        data.forEach((service, index) => {
+    if (Array.isArray(data.data)) {
+        data.data.forEach((service, index) => {
             console.log(`Service ${index + 1}:`);
             console.log(service); // Menampilkan seluruh isi objek
         });
