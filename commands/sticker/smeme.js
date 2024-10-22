@@ -26,7 +26,7 @@ module.exports = {
             let mee = 'shannSmeme.jpg'
             fs.writeFileSync(mee, file)
 
-            let mem = await TelegraPh(mee)
+            let mem = await TelegraPh(file)
             let smeme = `https://api.memegen.link/images/custom/${encodeURIComponent(m1)}/${encodeURIComponent(m2)}.png?background=${mem}`
             let { data } = await axios({ method: 'get', url: smeme, headers: { 'DNT': 1, 'Upgrade-Insecure-Request': 1 }, responseType: 'arraybuffer' }).catch(() => { return msg.reply('terjadi kesalahan') })
 

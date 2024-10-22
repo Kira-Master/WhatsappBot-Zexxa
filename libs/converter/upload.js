@@ -6,25 +6,19 @@ let cheerio = require('cheerio')
 let { fromBuffer } = require ('file-type')
 
 
-function TelegraPh(Path) {
-    return new Promise(async (resolve, reject) => {
-        if (!fs.existsSync(Path)) return reject(new Error("File not Found"))
-        try {
-            const form = new BodyForm();
-            form.append("file", fs.createReadStream(Path))
-            const data = await axios({
-                url: "https://telegra.ph/upload",
-                method: "POST",
-                headers: {
-                    ...form.getHeaders()
-                },
-                data: form
-            })
-            return resolve("https://telegra.ph" + data.data[0].src)
-        } catch (err) {
-            return reject(new Error(String(err)))
-        }
+async function TelegraPh(buffer) {
+    const {
+        ext
+    } = await fromBuffer(buffer)
+    let form = new FormData
+    form.append('file', buffer, 'tmp.' + ext)
+    let res = await fetch('https://telegra.ph/upload', {
+        method: 'POST',
+        body: form
     })
+    let img = await res.json()
+    if (img.error) throw img.error
+    return 'https://telegra.ph' + img[0].src
 }
 
 async function UploadFileUgu(input) {
