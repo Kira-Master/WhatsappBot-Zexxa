@@ -3,6 +3,9 @@ const axios = require ('axios').default
 const { writeExif } = require('@libs/converter/exif')
 const sharp = require('sharp')
 const cheerio = require('cheerio')
+const fs = require('fs')
+const path require('path')
+
 module.exports = {
     category: 'Search',
     description: 'search whatsapp sticker',
@@ -22,6 +25,9 @@ let gets = await axios.get(rand, { responseType: 'arraybuffer' });
 
 // Konversi gambar ke WebP menggunakan sharp
 let webpBuffer = await sharp(gets.data).webp().toBuffer();
+
+fs.writeFileSync(path.join(__dirname, 'temp_image.webp'), webpBuffer); // Simpan gambar WebP
+console.log('Gambar disimpan untuk pengecekan manual.');
 
 // Tambahkan metadata menggunakan writeExif
 let buffer = await writeExif({ data: webpBuffer, headers: { 'content-type': 'image/webp' } }, { packname: 'Zexxa', author: 'Bot' });
