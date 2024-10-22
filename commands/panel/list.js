@@ -18,7 +18,7 @@ try {
         } 
     });
     
-    let [m1, m2] = fullArgs.split('_')
+    let [m1, m2] = fullArgs.split('|')
 
     // Cek apakah res.data.data adalah array
     if (Array.isArray(res.data.data)) {
@@ -26,7 +26,7 @@ try {
         let specificServices = res.data.data.filter(service => service.name.toLowerCase().includes(m1.toLowerCase()) && service.price < m2);
 
         if (specificServices.length === 0) {
-            console.log("Tidak ada layanan yang ditemukan dengan kata ", fullArgs);
+            console.log("Tidak ada layanan yang ditemukan dengan kata ", m1, 'Dan harga', m2);
         } else {
         let zxxa = ''
         for (let i of specificServices) {
