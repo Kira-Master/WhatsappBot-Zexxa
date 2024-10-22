@@ -19,6 +19,7 @@ try {
     });
     
     let [m1, m2] = fullArgs.split('|')
+    m2 = parseFloat(m2)
 
     // Cek apakah res.data.data adalah array
     if (Array.isArray(res.data.data)) {
