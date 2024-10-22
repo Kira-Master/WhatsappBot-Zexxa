@@ -7,7 +7,6 @@ const { Boom } = require('@hapi/boom')
 const { existsSync } = require('fs')
 const store = require('@store')
 const Pino = require('pino')
-const readline = require('readline')
 
 existsSync('./store/baileys_store.json') && store.readFromFile('./store/baileys_store.json')
 setInterval(() => {
@@ -15,25 +14,18 @@ setInterval(() => {
 }, 60_000)
 
 const utility = new Utility()
-const question = (text) => { const rl = readline.createInterface({ input: process.stdin, output: process.stdout }); return new Promise((resolve) => { rl.question(text, resolve) }) };
 
 const connect = async () => {
     const { state, saveCreds } = await useMultiFileAuthState(`./auth_info`)
     const { version, isLatest } = await fetchLatestBaileysVersion()
 
     const client = WASocket({
-        printQRInTerminal: false,
+        printQRInTerminal: true,
         auth: state,
         logger: Pino({ level: 'silent' }),
-        browser: ['MacOs', 'Chrome', '1.0'],
+        browser: ['ZEXXA', 'Chrome', '1.0'],
         version,
     })
-    
-    if (!client.authState.creds.registered) {
-const phoneNumber = await question('Enter your phone number with country code without space and plus sign :\n');
-let code = await client.requestPairingCode(phoneNumber);
-code = code?.match(/.{1,4}/g)?.join("-") || code;
-console.log(`Code :`, code);
 
     store.bind(client.ev)
 
