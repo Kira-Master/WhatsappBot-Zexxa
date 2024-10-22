@@ -17,10 +17,10 @@ module.exports = {
     example: '{prefix}{command} dinokuning',
     callback: async({ msg, fullArgs, client }) => {
     let text = fullArgs
-let res = await getSticker(text);
-    let rand = res[Math.floor(Math.random() * res.length)]; // Pilih link sticker acak
+    let res = await getSticker(text);
+    let rand = res[Math.floor(Math.random() * res.length)]; // Pilih link stiker acak
 
-    // Ambil data gambar dari link sticker
+    // Ambil data gambar dari link stiker
     let gets = await axios.get(rand, { responseType: 'arraybuffer' });
 
     // Konversi gambar ke JPEG menggunakan sharp
@@ -34,28 +34,25 @@ let res = await getSticker(text);
     // Konversi dari JPEG ke WebP untuk proses `writeExif`
     let webpBuffer = await sharp(jpegBuffer).webp().toBuffer();
 
-    // Simpan hasil WebP sementara
-    let tempWebpPath = 'temp_image.webp';
-    fs.writeFileSync(tempWebpPath, webpBuffer);
-    console.log('Gambar WebP disimpan.');
-
     // Gunakan gambar WebP yang disimpan untuk penambahan metadata
     let buffer = await writeExif(
-      { data: webpBuffer, headers: { 'content-type': 'image/webp' } }, 
-      { packname: 'Zexxa', author: 'Bot' }
+        { data: webpBuffer, headers: { 'content-type': 'image/webp' } }, 
+        { packname: 'Zexxa', author: 'Bot' }
     );
 
     if (!buffer) {
-      return console.log('Gagal mengkonversi gambar atau menambahkan metadata');
+        console.log('Gagal mengkonversi gambar atau menambahkan metadata');
     } else {
-      return console.log('Berhasil menambahkan metadata ke gambar.');
+        console.log('Berhasil menambahkan metadata ke gambar.');
+
+        // Lanjutkan proses pengiriman atau pemrosesan buffer stiker
+        await msg.replySticker({ url: buffer });
     }
 
-// Lanjutkan proses pengiriman atau pemrosesan buffer stiker
-        
-        await msg.replySticker({ url: buffer })
-        await fs.unlinkSync('temp_image.webp')
-        fs.unlinkSync('temp_image.jpg')
+    // Hapus file sementara
+    fs.unlinkSync(tempJpegPath);
+    fs.unlinkSync('temp_image.webp'); // Hapus jika diperlukan
+
 	}
 }
 
