@@ -22,7 +22,7 @@ try {
     
     if (Array.isArray(data.data)) {
         data.data.forEach((service, index) => {
-            console.log(`Service ${index + 1}:`);
+            console.log(`Service Name: ${service.name}`);
             console.log(service); // Menampilkan seluruh isi objek
         });
     } else {
