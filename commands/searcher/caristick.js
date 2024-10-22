@@ -4,7 +4,7 @@ const { writeExif } = require('@libs/converter/exif')
 const sharp = require('sharp')
 const cheerio = require('cheerio')
 const fs = require('fs')
-const path require('path')
+const path = require('path')
 
 module.exports = {
     category: 'Search',
