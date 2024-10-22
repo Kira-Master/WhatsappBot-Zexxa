@@ -16,13 +16,15 @@ module.exports = {
 let res = await getSticker(text);
 let rand = res[Math.floor(Math.random() * res.length)];
 
-// Ambil data gambar dari link
+// Ambil data gambar
 let gets = await axios.get(rand, { responseType: 'arraybuffer' });
 
-// Tambahkan metadata dengan writeExif
-let buffer = await writeExif({ data: gets.data, headers: { 'content-type': 'image/jpeg' } }, { packname: 'Zexxa', author: 'Bot' });
+// Konversi gambar ke WebP menggunakan sharp
+let webpBuffer = await sharp(gets.data).webp().toBuffer();
 
-// Cek apakah buffer berhasil dibuat
+// Tambahkan metadata menggunakan writeExif
+let buffer = await writeExif({ data: webpBuffer, headers: { 'content-type': 'image/webp' } }, { packname: 'Zexxa', author: 'Bot' });
+
 if (!buffer) {
   return msg.reply('Gagal mengkonversi gambar');
 }
