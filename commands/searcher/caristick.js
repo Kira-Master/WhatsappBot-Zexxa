@@ -1,6 +1,7 @@
 const { ICommand } = require ('@libs/builders/command')
 const axios = require ('axios').default
 const { writeExif } = require('@libs/converter/exif')
+const sharp = require('sharp')
 const cheerio = require('cheerio')
 module.exports = {
     category: 'Search',
