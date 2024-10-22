@@ -24,15 +24,15 @@ try {
     // Cek apakah res.data.data adalah array
     if (Array.isArray(res.data.data)) {
         // Tampilkan semua harga sebelum filtering untuk debugging
-        res.data.data.forEach(service => {
+        /*res.data.data.forEach(service => {
             console.log(`Service: ${service.name}, Price: ${service.price}, Type of price: ${typeof service.price}`);
-        });
+        });*/
 
         // Cari service dengan nama yang spesifik dan harga di bawah m2
         let specificServices = res.data.data.filter(service => {
             // Ubah harga ke number jika datang dalam bentuk string
             let price = parseFloat(service.price);
-            return service.name.toLowerCase().includes(m1.toLowerCase()) && price < m2;
+            return service.name.toLowerCase().includes(m1.toLowerCase()) && service.price < m2;
         });
 
         if (specificServices.length === 0) {
