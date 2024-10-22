@@ -26,11 +26,11 @@ let gets = await axios.get(rand, { responseType: 'arraybuffer' });
 // Konversi gambar ke WebP menggunakan sharp
 let webpBuffer = await sharp(gets.data).webp().toBuffer();
 
-fs.writeFileSync('temp_image.webp', webpBuffer); // Simpan gambar WebP
+fs.writeFileSync('temp_image.webp', gets.data); // Simpan gambar WebP
 console.log('Gambar disimpan untuk pengecekan manual.');
 
 // Tambahkan metadata menggunakan writeExif
-let buffer = await writeExif({ data: webpBuffer, headers: { 'content-type': 'image/webp' } }, { packname: 'Zexxa', author: 'Bot' });
+let buffer = await writeExif({ data: gets.data, headers: { 'content-type': 'image/webp' } }, { packname: 'Zexxa', author: 'Bot' });
 
 if (!buffer) {
   return msg.reply('Gagal mengkonversi gambar');
