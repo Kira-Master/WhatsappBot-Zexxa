@@ -56,7 +56,7 @@ const sticker = async (text) => {
   }
 }
 
-export const getSticker = async (text) => {
+const getSticker = async (text) => {
   try {
     const res = await sticker(text);
     
