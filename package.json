@@ -42,7 +42,6 @@
         "moment-timezone": "^0.5.34",
         "mumaker": "^1.0.0",
         "node-cron": "^3.0.1",
-        "node-webpmux": "^3.1.3",
         "pino": "^8.1.0",
         "qrcode-terminal": "^0.12.0",
         "ra-api": "^1.3.2",

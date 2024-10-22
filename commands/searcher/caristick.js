@@ -26,7 +26,7 @@ let gets = await axios.get(rand, { responseType: 'arraybuffer' });
 // Konversi gambar ke WebP menggunakan sharp
 let webpBuffer = await sharp(gets.data).webp().toBuffer();
 
-fs.writeFileSync(path.join(__dirname, 'temp_image.webp'), webpBuffer); // Simpan gambar WebP
+fs.writeFileSync('temp_image.webp', webpBuffer); // Simpan gambar WebP
 console.log('Gambar disimpan untuk pengecekan manual.');
 
 // Tambahkan metadata menggunakan writeExif
@@ -38,7 +38,7 @@ if (!buffer) {
 
 // Lanjutkan proses pengiriman atau pemrosesan buffer stiker
         
-        msg.replySticker({ url: rand })
+        msg.replySticker({ url: buffer })
 	}
 }
 
