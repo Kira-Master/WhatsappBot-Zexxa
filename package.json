@@ -29,6 +29,7 @@
         "file-type": "^16.5.4",
         "fluent-ffmpeg": "^2.1.2",
         "form-data": "^4.0.0",
+        "g4f": "^1.4.6",
         "gambarin": "^1.0.6",
         "github-scraper": "^7.0.1",
         "glob": "^8.0.3",
