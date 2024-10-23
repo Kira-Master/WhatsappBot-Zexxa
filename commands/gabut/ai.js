@@ -24,6 +24,7 @@ module.exports = {
             // Cek apakah ada hasil dan kirimkan respons ke user
             if (response) {
                 await msg.reply(response);
+                console.log(response)
             } else {
                 await msg.reply('Maaf, saya tidak bisa memberikan respons saat ini.');
             }
