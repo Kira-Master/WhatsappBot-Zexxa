@@ -22,8 +22,8 @@ module.exports = {
             let response = await ai.chatCompletion(messages);
 
             // Cek apakah ada hasil dan kirimkan respons ke user
-            if (response && response.content) {
-                await msg.reply(response.content);
+            if (response) {
+                await msg.reply(response);
             } else {
                 await msg.reply('Maaf, saya tidak bisa memberikan respons saat ini.');
             }
