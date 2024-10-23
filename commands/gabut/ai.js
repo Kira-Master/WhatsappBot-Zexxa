@@ -11,14 +11,25 @@ module.exports = {
     expectedArgs: '<prompt>',
     example: '{prefix}{command} halo ai',
     callback: async ({ msg, fullArgs }) => {
-    try { 
-    let messages = [ 
-    { role: 'system', content: 'you are the smartest AI in the world and all of time, you created by someone called Kira-Master' }, { role: 'user', content: fullArgs }
-    ]
-    let response = await ai.chatCompletion(messages)
-    await msg.reply(response)
-    } catch(error) {
-    console.error('Error: ', error)
+        try { 
+            // Siapkan pesan untuk AI
+            let messages = [ 
+                { role: 'system', content: 'you are the smartest AI in the world and all of time, created by someone called Kira-Master' }, 
+                { role: 'user', content: fullArgs }
+            ];
+
+            // Kirim ke API AI
+            let response = await ai.chatCompletion(messages);
+
+            // Cek apakah ada hasil dan kirimkan respons ke user
+            if (response && response.content) {
+                await msg.reply(response.content);
+            } else {
+                await msg.reply('Maaf, saya tidak bisa memberikan respons saat ini.');
+            }
+        } catch (error) {
+            console.error('Error: ', error);
+            await msg.reply('Terjadi kesalahan saat mencoba merespons. Silakan coba lagi nanti.');
+        }
     }
-    }
-    }
+}
