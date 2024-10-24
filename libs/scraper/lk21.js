@@ -2,6 +2,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 
 function getRandomProxy() {
     const proxyPath = path.join(__dirname, 'proxy.txt');
@@ -23,8 +24,13 @@ const lk21 = async (text) => {
   }
 };
 
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false // Menonaktifkan verifikasi sertifikat SSL
+});
+
 const config = {
   proxy: proxy,
+  httpsAgent: httpsAgent,
   headers: {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
   }
