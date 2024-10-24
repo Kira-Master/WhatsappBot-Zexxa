@@ -3,7 +3,7 @@ const { writeExifImg } = require('@libs/converter/exif')
 const fs = require('fs')
 const { TelegraPh } = require('@libs/converter/upload')
 const axios = require('axios').default
-
+const { upload, uploadByUrl, uploadByBuffer, uploadByPath } = require('opex-telegraph-uploader');
 /**
  * @type { ICommand }
  */

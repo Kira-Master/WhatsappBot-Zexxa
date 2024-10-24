@@ -1,6 +1,7 @@
 const fetch = require('node-fetch')
 const cheerio = require('cheerio')
 const axios = require('axios').default
+
 function sfileSearch(query, page = 1) {
 axios.get(`https://sfile.mobi/search.php?q=${query}&page=${page}`).then((res) => {
 
