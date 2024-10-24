@@ -20,7 +20,7 @@ const lk21 = async (text) => {
 const agent = new https.Agent({
   rejectUnauthorized: false, // Menonaktifkan verifikasi SSL
 });
-
+console.log(ip, port)
 const { data } = await axios.get(`${baseUrl}/search.php?s=${encodeURIComponent(text)}&gsc.tab=0&gsc.q=${encodeURIComponent(text)}&gsc.page=1`, {
   httpsAgent: agent, // Menggunakan agent ini dalam request
   headers: {
@@ -28,7 +28,6 @@ const { data } = await axios.get(`${baseUrl}/search.php?s=${encodeURIComponent(t
   },
   proxy: { host: ip, port: parseInt(port) } // Jika proxy digunakan
 });
-console.log(ip, port)
     
     const $ = cheerio.load(data);
     const scrape = [];
