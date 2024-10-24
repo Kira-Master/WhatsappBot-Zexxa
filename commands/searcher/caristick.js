@@ -39,12 +39,6 @@ module.exports = {
     }
 }
 
-const axios = require('axios');
-const cheerio = require('cheerio');
-
-const axios = require('axios');
-const cheerio = require('cheerio');
-
 const sticker = async (text) => {
   try {
     // Melakukan permintaan GET untuk mendapatkan data awal dan informasi halaman
