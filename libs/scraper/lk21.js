@@ -4,14 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-function getRandomProxy() {
-    const proxyPath = path.join(__dirname, 'proxy.txt');
-    const proxies = fs.readFileSync(proxyPath, 'utf-8').split('\n').filter(Boolean);  // Hapus baris kosong
-    const randomIndex = Math.floor(Math.random() * proxies.length);  // Pilih index secara acak
-    const [ip, port] = proxies[randomIndex].trim().split(':');  // Pisahkan ip dan port
-    return { ip, port };
-}
-
 const lk21 = async (text) => {
   try {
     const baseUrl = 'https://tv4.lk21official.my';  // Tambahkan domain
@@ -29,12 +21,14 @@ const httpsAgent = new https.Agent({
 });
 
 const config = {
-  proxy: proxy,
-  httpsAgent: httpsAgent,
-  headers: {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-  }
-};
+      proxy: proxy,
+      httpsAgent: httpsAgent,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+        'Accept-Language': 'en-US,en;q=0.9',  // Tambahkan beberapa header lain untuk membuat permintaan terlihat lebih alami
+        'Referer': baseUrl
+      }
+    };
 
 const { data } = await axios.get(`${baseUrl}/search.php?s=${encodeURIComponent(text)}&gsc.tab=0&gsc.q=${encodeURIComponent(text)}&gsc.page=1`, config);
     
