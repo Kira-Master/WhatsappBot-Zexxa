@@ -85,8 +85,13 @@ const getSticker = async (text) => {
       stickerImages.push(imgSrc);
     });
 
-    // Batasi hasil menjadi 5 sticker
-    const limitedStickerImages = stickerImages.slice(0, 5);
+    // Jika jumlah stickerImages kurang dari 5, ambil semua
+    const count = Math.min(stickerImages.length, 5);
+    
+    // Mengacak stickerImages
+    const shuffled = stickerImages.sort(() => 0.5 - Math.random());
+    // Mengambil 5 item secara acak
+    const limitedStickerImages = shuffled.slice(0, count);
 
     console.log('Gambar Sticker:', limitedStickerImages);
     return limitedStickerImages;
