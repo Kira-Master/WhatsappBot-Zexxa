@@ -9,33 +9,34 @@ const path = require('path')
 module.exports = {
     category: 'Search',
     description: 'search whatsapp sticker',
-    cooldown: 10 * 1000,
+    cooldown: 3 * 1000,
     limit: true,
     waitMessage: true,
     minArgs: 1,
     expectedArgs: 'gojosatoru, among, anime, animegif, bucin, rabbit, manusialidi, dinokuning, pentol, doge, gura, mukalu, spongebob, kawanspongebob, patrick, patrickgif, random, paimon, chat',
     example: '{prefix}{command} dinokuning',
     callback: async({ reaction, m, msg, fullArgs, client }) => {
-    let text = fullArgs
-    let res = await getSticker(text);
-    
-    for ( let i of res ) {
-    // Ambil data gambar dari link stiker
-    let gets = await axios.get(i, { responseType: 'arraybuffer' });
-    
-    let typeImage = gets.headers['content-type']
-    let buffer = await writeExifImg(gets.data, { packname: 'ZEXXA', author: 'DEV' })
+        let text = fullArgs;
+        let res = await getSticker(text);
+        
+        for (let i of res) {
+            // Ambil data gambar dari link stiker
+            let gets = await axios.get(i, { responseType: 'arraybuffer' });
+            
+            let typeImage = gets.headers['content-type'];
+            let buffer = await writeExifImg(gets.data, { packname: 'ZEXXA', author: 'DEV' });
 
-    if (!buffer) {
-        console.log('Gagal mengkonversi gambar atau menambahkan metadata');
-    } else {
-        console.log('Berhasil menambahkan metadata ke gambar.');
+            if (!buffer) {
+                console.log('Gagal mengkonversi gambar atau menambahkan metadata');
+            } else {
+                console.log('Berhasil menambahkan metadata ke gambar.');
 
-        // Lanjutkan proses pengiriman atau pemrosesan buffer stiker
-        await msg.replySticker({ url: buffer });
+                // Lanjutkan proses pengiriman atau pemrosesan buffer stiker
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Jeda 1 detik
+                await msg.replySticker({ url: buffer });
+            }
+        }
     }
-    }
-	}
 }
 
 const sticker = async (text) => {
