@@ -39,9 +39,9 @@ module.exports = {
     }
 }
 
-const sticker = async (text) => {
+const sticker = async (text, page = Math.floor(Math.random() * 3) + 1) => {
   try {
-    const res = await axios.get(`https://getstickerpack.com/stickers?query=${text}`);
+    const res = await axios.get(`https://getstickerpack.com/stickers?query=${text}&page=${page}`);
     const $ = cheerio.load(res.data);
     
     const stickers = [];
