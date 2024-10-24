@@ -39,12 +39,12 @@ module.exports = {
     }
 }
 
-const sticker = async (text, page = Math.floor(Math.random() * 3) + 1) => {
+const sticker = async (text, page = Math.floor(Math.random() * 5) + 1) => {
   try {
     const res = await axios.get(`https://getstickerpack.com/stickers?query=${text}&page=${page}`);
     const $ = cheerio.load(res.data);
     
-    console.log(text, page)
+    console.log('Query: ', text, 'Page: ', page)
     const stickers = [];
     $('#stickerPacks > .container > div.row > div.col-md-6').each((index, element) => {
       const title = $(element).find('a').text();
