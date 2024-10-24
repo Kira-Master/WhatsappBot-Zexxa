@@ -18,7 +18,7 @@ module.exports = {
     callback: async({ reaction, m, msg, fullArgs, client }) => {
         let text = fullArgs;
         let res = await getSticker(text);
-        
+        console.log('Query: ', text)
         for (let i of res) {
             // Ambil data gambar dari link stiker
             let gets = await axios.get(i, { responseType: 'arraybuffer' });
