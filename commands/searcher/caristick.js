@@ -44,6 +44,7 @@ const sticker = async (text, page = Math.floor(Math.random() * 3) + 1) => {
     const res = await axios.get(`https://getstickerpack.com/stickers?query=${text}&page=${page}`);
     const $ = cheerio.load(res.data);
     
+    console.log(text, page)
     const stickers = [];
     $('#stickerPacks > .container > div.row > div.col-md-6').each((index, element) => {
       const title = $(element).find('a').text();
