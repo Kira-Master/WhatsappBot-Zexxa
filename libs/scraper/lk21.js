@@ -1,15 +1,30 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const fs = require('fs');
+const path = require('path');
+
+function getRandomProxy() {
+    const proxyPath = path.join(__dirname, 'proxy.txt');
+    const proxies = fs.readFileSync(proxyPath, 'utf-8').split('\n').filter(Boolean);  // Hapus baris kosong
+    const randomIndex = Math.floor(Math.random() * proxies.length);  // Pilih index secara acak
+    const [ip, port] = proxies[randomIndex].trim().split(':');  // Pisahkan ip dan port
+    return { ip, port };
+}
 
 const lk21 = async (text) => {
   try {
     const baseUrl = 'https://tv4.lk21official.my';  // Tambahkan domain
+    const { ip, port } = getRandomProxy()
 
     // Mengambil halaman pencarian
     const { data } = await axios.get(`${baseUrl}/search.php?s=${encodeURIComponent(text)}&gsc.tab=0&gsc.q=${encodeURIComponent(text)}&gsc.page=1`, {
   headers: {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-  }
+  },
+  proxy: {
+        host: ip,,
+        port: parseInt(port)
+        }   
 });
     
     const $ = cheerio.load(data);
