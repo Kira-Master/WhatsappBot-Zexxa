@@ -7,7 +7,7 @@ const lk21 = async (text) => {
     const baseUrl = 'https://tv4.lk21official.my'; // Tambahkan domain
     const proxy = {
       host: 'gw.dataimpulse.com',
-      port: 823,
+      port: 824,
       auth: {
         username: '2cd11bc246af02f634ff__cr.id',
         password: '0509ccc4dc510af0'
