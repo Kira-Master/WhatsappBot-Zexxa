@@ -30,7 +30,7 @@ const config = {
       }
     };
 
-const { data } = await axios.get(`${baseUrl}/search.php?s=${encodeURIComponent(text)}&gsc.tab=0&gsc.q=${encodeURIComponent(text)}&gsc.page=1`, config);
+const { data } = await axios.get(`${baseUrl}/search.php?s=${encodeURIComponent(text)}`, config);
     
     const $ = cheerio.load(data);
     const scrape = [];
