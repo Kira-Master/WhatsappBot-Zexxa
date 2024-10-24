@@ -18,12 +18,10 @@ module.exports = {
     callback: async({ reaction, m, msg, fullArgs, client }) => {
     let text = fullArgs
     let res = await getSticker(text);
-    let rand = res[Math.floor(Math.random() * res.length)]; // Pilih link stiker acak
-
-    // Ambil data gambar dari link stiker
-    let gets = await axios.get(rand, { responseType: 'arraybuffer' });
     
-    console.log(gets.headers['content-type'])
+    for ( let i of res ) {
+    // Ambil data gambar dari link stiker
+    let gets = await axios.get(i, { responseType: 'arraybuffer' });
     
     let typeImage = gets.headers['content-type']
     let buffer = await writeExifImg(gets.data, { packname: 'ZEXXA', author: 'DEV' })
@@ -35,6 +33,7 @@ module.exports = {
 
         // Lanjutkan proses pengiriman atau pemrosesan buffer stiker
         await msg.replySticker({ url: buffer });
+    }
     }
 	}
 }
