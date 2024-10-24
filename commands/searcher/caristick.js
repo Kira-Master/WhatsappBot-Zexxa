@@ -85,9 +85,12 @@ const getSticker = async (text) => {
       stickerImages.push(imgSrc);
     });
 
-    console.log('Gambar Sticker:', stickerImages);
-    return stickerImages;
- 
+    // Batasi hasil menjadi 5 sticker
+    const limitedStickerImages = stickerImages.slice(0, 5);
+
+    console.log('Gambar Sticker:', limitedStickerImages);
+    return limitedStickerImages;
+
   } catch (error) {
     console.error(error);
   }
