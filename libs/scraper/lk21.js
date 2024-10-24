@@ -2,6 +2,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 
 function getRandomProxy() {
     const proxyPath = path.join(__dirname, 'proxy.txt');
@@ -16,15 +17,16 @@ const lk21 = async (text) => {
     const baseUrl = 'https://tv4.lk21official.my';  // Tambahkan domain
     const { ip, port } = getRandomProxy()
 
-    // Mengambil halaman pencarian
-    const { data } = await axios.get(`${baseUrl}/search.php?s=${encodeURIComponent(text)}&gsc.tab=0&gsc.q=${encodeURIComponent(text)}&gsc.page=1`, {
+const agent = new https.Agent({
+  rejectUnauthorized: false, // Menonaktifkan verifikasi SSL
+});
+
+const { data } = await axios.get(`${baseUrl}/search.php?s=${encodeURIComponent(text)}&gsc.tab=0&gsc.q=${encodeURIComponent(text)}&gsc.page=1`, {
+  httpsAgent: agent, // Menggunakan agent ini dalam request
   headers: {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
   },
-  proxy: {
-        host: ip,
-        port: parseInt(port)
-        }   
+  proxy: { host, port } // Jika proxy digunakan
 });
     
     const $ = cheerio.load(data);
