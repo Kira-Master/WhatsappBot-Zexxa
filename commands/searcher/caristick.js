@@ -39,12 +39,39 @@ module.exports = {
     }
 }
 
-const sticker = async (text, page = Math.floor(Math.random() * 5) + 1) => {
+const axios = require('axios');
+const cheerio = require('cheerio');
+
+const axios = require('axios');
+const cheerio = require('cheerio');
+
+const sticker = async (text) => {
   try {
-    const res = await axios.get(`https://getstickerpack.com/stickers?query=${text}&page=${page}`);
+    // Melakukan permintaan GET untuk mendapatkan data awal dan informasi halaman
+    const initialRes = await axios.get(`https://getstickerpack.com/stickers?query=${text}&page=1`);
+    const initialPage = cheerio.load(initialRes.data);
+    
+    // Menghitung total halaman dari elemen pagination
+    const totalPages = initialPage('#paginationBlock .page-item a.page-link')
+      .map((index, element) => {
+        const pageNum = parseInt(initialPage(element).text());
+        return isNaN(pageNum) ? null : pageNum;
+      })
+      .get()
+      .filter(num => num !== null)
+      .sort((a, b) => a - b)
+      .pop() || 1; // Ambil nomor halaman terakhir atau 1 jika tidak ada
+
+    console.log(`Total halaman yang tersedia: ${totalPages}`);
+
+    // Menghasilkan halaman acak antara 1 dan totalPages
+    const randomPage = Math.floor(Math.random() * totalPages) + 1;
+    console.log(`Halaman yang dipilih secara acak: ${randomPage}`);
+
+    // Melakukan permintaan GET dengan halaman acak
+    const res = await axios.get(`https://getstickerpack.com/stickers?query=${text}&page=${randomPage}`);
     const $ = cheerio.load(res.data);
     
-    console.log('Query: ', text, 'Page: ', page)
     const stickers = [];
     $('#stickerPacks > .container > div.row > div.col-md-6').each((index, element) => {
       const title = $(element).find('a').text();
@@ -55,9 +82,15 @@ const sticker = async (text, page = Math.floor(Math.random() * 5) + 1) => {
         link  // Pastikan link lengkap
       });
     });
-    
-    return stickers;
-    
+
+    // Mengambil hingga 5 item secara acak dari stickers
+    const limitedStickers = stickers.length > 5 
+      ? stickers.sort(() => Math.random() - 0.5).slice(0, 5) 
+      : stickers;
+
+    console.log(`Jumlah stiker yang ditemukan: ${limitedStickers.length}`);
+    return limitedStickers; // Kembalikan sticker yang sudah dibatasi
+
   } catch (error) {
     console.error('Error:', error);
     return [];
