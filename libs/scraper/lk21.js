@@ -5,28 +5,22 @@ const https = require('https');
 const lk21 = async (text) => {
   try {
     const baseUrl = 'https://tv4.lk21official.my'; // Tambahkan domain
-    const proxy = {
-      host: 'gw.dataimpulse.com',
-      port: 824,
-      auth: {
-        username: '2cd11bc246af02f634ff__cr.id',
-        password: '0509ccc4dc510af0'
-      }
-    };
-
-    const httpsAgent = new https.Agent({
-      rejectUnauthorized: false // Menonaktifkan verifikasi sertifikat SSL
-    });
-
+    
     const config = {
-    proxy,
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': baseUrl,
-        'Connection': 'keep-alive' // Menjaga koneksi tetap hidup
-      }
+        accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
+        "cache-control": "max-age=0",
+        "cf-ipcountry": "ID",
+        "sec-ch-ua": '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
+        "sec-ch-ua-mobile": "?1",
+        "sec-ch-ua-platform": '"Android"',
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "none",
+        "sec-fetch-user": "?1",
+        "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36",
+      },
     };
 
     const searchUrl = `${baseUrl}/search.php?s=${encodeURIComponent(text)}`; // URL pencarian
